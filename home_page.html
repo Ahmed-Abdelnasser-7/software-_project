@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant</title>
+
+    <!-- Load Tailwind CSS for modern sections -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      /* =======================================================
+      CUSTOM CSS VARIABLES & BASE STYLES
+      =======================================================
+      */
+      :root {
+        /* Custom primary accent color (used for links, buttons, and lines) */
+        --primary-color: rgb(202, 138, 4);
+        /* Muted accent color (used for icons and secondary elements) */
+        --secondary-color: #86917a;
+        /* Dark background for the body */
+        --bg-dark: #000000;
+        /* Slightly lighter background for contrasting sections */
+        --bg-medium: #141414;
+        /* Light color for text */
+        --text-light: #ffffff;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        scroll-behavior: smooth;
+      }
+
+      /* =======================================================
+      HEADER / NAVIGATION BAR STYLES
+      =======================================================
+      */
+      .top-bar {
+        /* FIX: Added margin-top to move the bar down slightly */
+        margin-top: 10px;
+        backdrop-filter: blur(12px);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: rgba(255, 255, 255, 0.2);
+        height: 4rem;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        position: fixed;
+        width: 98%;
+        z-index: 10;
+        margin-left: -2px;
+        left: 50%; /* Center the fixed bar */
+        transform: translateX(-50%); /* Center the fixed bar */
+      }
+
+      /* Style for the Registration button */
+      .register-btn {
+        color: var(--text-light);
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        background-color: var(--primary-color);
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 1rem;
+        position: absolute;
+        right: 5rem;
+        border: none;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .register-btn:hover {
+        background-color: rgb(255, 215, 0); /* Hover state color */
+        cursor: pointer;
+      }
+
+      /* Container for the shopping bag icon button */
+      .shopping-bag-btn {
+        width: 50px;
+        height: 43px;
+        position: absolute;
+        right: 1.25rem;
+        background-color: transparent;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border: none;
+      }
+
+      /* Styling the shopping bag icon/image */
+      .shopping-bag {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 0.5rem;
+        border: none;
+        transition: background-color 0.3s ease;
+        object-fit: contain;
+      }
+      .shopping-bag:hover {
+        background-color: rgb(255, 215, 0); /* Hover state color */
+        cursor: pointer;
+      }
+
+      /* Container for main navigation links */
+      .links {
+        position: absolute;
+        left: 33%;
+        display: flex;
+        gap: 40px;
+        font-size: 25px;
+        font-weight: 450;
+        color: var(--text-light);
+        font-family: "Poppins";
+      }
+
+      /* Style for individual links */
+      .links a {
+        position: relative;
+        transition: color 0.3s ease;
+        text-decoration: none;
+        color: var(--text-light);
+      }
+
+      /* Underline animation for links */
+      .links a::after {
+        content: "";
+        position: absolute;
+        bottom: -7px;
+        left: 0;
+        height: 2px;
+        width: 113%;
+        background: var(--primary-color);
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+
+      .links a:hover::after {
+        transform: scaleX(1);
+      }
+
+      /* Style for the active page link */
+      .links a.active {
+        color: var(--primary-color);
+      }
+
+      .links a.active::after {
+        transform: scaleX(1);
+      }
+
+      /* =======================================================
+      BACKGROUND SLIDER STYLES
+      =======================================================
+      */
+      .bg-slider {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .bg-slider img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1.5s ease;
+      }
+
+      .bg-slider img.active {
+        opacity: 1;
+      }
+
+      /* Dark overlay to ensure text visibility */
+      .bg-slider::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45));
+        z-index: 5;
+      }
+
+      /* =======================================================
+      HOME PAGE HERO CONTENT STYLES
+      =======================================================
+      */
+
+      /* Horizontal line under the greeting */
+      .line {
+        position: absolute;
+        top: 40.5%; /* Adjusted from 39.5% (moved up 1%) */
+        left: 38%;
+        width: 390px;
+        height: 4px;
+        background-color: var(--primary-color);
+        z-index: 10;
+      }
+      /* Small greeting text */
+      .greeting {
+        position: absolute;
+        top: 35%; /* Adjusted from 25% (moved up 1%) */
+        left: 41%;
+        color: var(--text-light);
+        font-size: 30px;
+        font-family: "Poppins";
+        font-weight: 500;
+        z-index: 10;
+      }
+      /* Main content container for centering */
+      .content {
+        position: absolute;
+        top: 25%; /* ADJUSTED: Changed from 23% to 22% to move the content up 1% */
+        left: 38%;
+        width: 400px;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        z-index: 10;
+      }
+      /* Main header text */
+      .header {
+        position: absolute;
+        color: var(--text-light);
+        width: 100%;
+        font-size: 60px;
+        text-align: center;
+        font-family: "Poppins";
+        font-weight: 700;
+      }
+      /* Log in button style */
+      .log-in {
+        position: absolute;
+        top: 72%;
+        left: 19%;
+        padding: 10px 24px;
+        font-size: 25px;
+        color: var(--text-light);
+        background-color: var(--primary-color);
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-family: "Poppins";
+        font-weight: 500;
+        z-index: 10;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
+        text-decoration: none;
+      }
+      /* Open Menu button style */
+      .open-menu {
+        position: absolute;
+        top: 72%;
+        left: 48%;
+        padding: 12px 20px;
+        font-size: 20px;
+        color: var(--text-light);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: "Poppins";
+        font-weight: 500;
+        background-color: transparent;
+        z-index: 10;
+        text-decoration: none;
+      }
+      /* Hover effect for main buttons */
+      .log-in:hover,
+      .open-menu:hover {
+        background-color: rgb(255, 215, 0); /* Hover state color */
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 
+    =======================================================
+    BACKGROUND SLIDER & NAVIGATION
+    =======================================================
+    -->
+    <section id="home-page">
+      <div class="bg-slider">
+        <!-- Image files are expected to be in the same directory -->
+        <img src="Restaurant background.png" class="active" />
+        <img src="Restaurant background_2.png" />
+        <img src="daddy_patty.jpg" />
+      </div>
+
+      <!-- TOP BAR (Fixed Navigation Menu) -->
+      <div class="top-bar">
+        <img
+          src="moms-logo.png"
+          style="height: 56px; width: auto"
+          alt="MOMS logo"
+        />
+
+        <!-- Navigation Links -->
+        <div class="links">
+          <a href="#home-page" class="active">Home</a>
+          <a href="#our-menu">Menu</a>
+          <a href="#our-story">Our Story</a>
+          <a href="#our-chefs">Chefs</a>
+          <!-- Link for the new Contact section -->
+          <a href="#contact">Contact</a>
+        </div>
+
+        <a href="register.html" class="register-btn">Registration</a>
+
+        <button class="shopping-bag-btn">
+          <img
+            src="shopping-bag.png"
+            alt="Shopping bag icon"
+            class="shopping-bag"
+          />
+        </button>
+      </div>
+
+      <!-- 
+    =======================================================
+    MAIN HERO SECTION (Fixed/Absolute Positioned Content)
+    =======================================================
+    -->
+      <h2 class="line"></h2>
+      <h3 class="greeting">HELLO, NEW FRIEND!</h3>
+      <div class="content">
+        <h1 class="header">Welcome to MOMS</h1>
+        <a href="login.html" class="log-in">Log in</a>
+        <!-- Anchor to smoothly scroll to the Menu section -->
+        <a href="#our-menu" class="open-menu">Open Menu</a>
+      </div>
+    </section>
+    <!-- Empty div to push subsequent content below the viewport -->
+    <div style="height: 100vh"></div>
+
+    <!-- 
+    =======================================================
+    JAVASCRIPT (ALL CODE CONSOLIDATED HERE)
+    =======================================================
+    -->
+    <script>
+      // =======================================================
+      // NAVIGATION LINK ACTIVATION LOGIC
+      // =======================================================
+      function setActiveLink() {
+        const Links = document.querySelectorAll(".links a");
+        // Get the current page name from the URL
+        const currentPage = window.location.hash;
+        if (!currentPage) {
+          currentPage = "#home-page"; // Match the first link's effective target
+        }
+        Links.forEach((Link) => {
+          const href = Link.getAttribute("href");
+
+          // Remove the 'active' class from all links first
+          Link.classList.remove("active");
+
+          // Compare the link's target to the current URL hash
+          if (href === currentPage) {
+            Link.classList.add("active");
+          }
+        });
+      }
+
+      setActiveLink();
+
+      window.addEventListener("hashchange", setActiveLink);
+
+      // =======================================================
+      // BACKGROUND SLIDER LOGIC
+      // =======================================================
+
+      const slides = document.querySelectorAll(".bg-slider img");
+      let current = 0;
+
+      function changeSlide() {
+        slides.forEach((img) => img.classList.remove("active"));
+        slides[current].classList.add("active");
+
+        current++;
+        if (current === slides.length) current = 0;
+      }
+
+      // Initialize and start the slider animation
+      changeSlide();
+      // Change slide every 5 seconds (5000ms)
+      setInterval(changeSlide, 5000);
+
+      // =======================================================
+      // IMAGE MODAL LOGIC (Corrected to ensure global access)
+      // =======================================================
+
+      const modal = document.getElementById("image-modal");
+      const modalImage = document.getElementById("modal-image");
+
+      /**
+       * Opens the image modal with the full-size image source from the clicked element.
+       * @param {HTMLImageElement} clickedElement - The thumbnail image element that was clicked.
+       */
+      function openModal(clickedElement) {
+        // Get the full image source from the data-full-src attribute
+        const imgSrc = clickedElement.getAttribute("data-full-src");
+        const imgAlt = clickedElement.getAttribute("alt");
+
+        // Set the modal image source and alt text
+        modalImage.src = imgSrc;
+        modalImage.alt = imgAlt;
+
+        // Activate the modal overlay to show it
+        modal.classList.add("active");
+
+        // Prevent scrolling the main page while the modal is open
+        document.body.style.overflow = "hidden";
+      }
+
+      // Expose openModal globally for the onclick attribute to find it
+      window.openModal = openModal;
+
+      /**
+       * Closes the image modal and restores body scrolling.
+       */
+      function closeModal() {
+        // Deactivate the modal overlay to hide it
+        modal.classList.remove("active");
+
+        // Restore scrolling on the main page
+        document.body.style.overflow = "auto";
+      }
+
+      // Expose closeModal globally for the onclick attribute to find it
+      window.closeModal = closeModal;
+
+      // Add an event listener to the modal overlay itself to close when clicking outside the image
+      modal.addEventListener("click", (e) => {
+        // Check if the click occurred directly on the overlay, not the image content
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>
