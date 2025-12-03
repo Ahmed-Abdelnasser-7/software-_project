@@ -321,6 +321,66 @@
           object-position: top;
           width: 100%;
       }
+      /* =======================================================
+      IMAGE MODAL STYLES
+      =======================================================
+      */
+      .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.9);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000; /* Ensure it's on top of everything */
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .modal-overlay.active {
+          opacity: 1;
+          visibility: visible;
+      }
+
+      .modal-content {
+          position: relative;
+          max-width: 90%;
+          max-height: 90%;
+          border-radius: 1rem;
+          overflow: hidden;
+          box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+      }
+
+      .modal-content img {
+          display: block;
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+      }
+
+      .close-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          font-size: 1.5rem;
+          cursor: pointer;
+          transition: background 0.2s;
+      }
+
+      .close-btn:hover {
+          background: var(--primary-color);
+          color: var(--bg-dark);
+      }
     </style>
   </head>
 
@@ -605,5 +665,198 @@
             </div>
         </div>
     </section>
+    <!-- 
+    =======================================================
+    3. SIGNATURE MENU SECTION (Clickable images added)
+    =======================================================
+    -->
+    <section id="our-menu" class="py-20" style="background-color: var(--bg-dark);">
+        <div class="container mx-auto px-6 text-center">
+            <i class="fas fa-utensils accent-icon"></i>
+            <h2 class="section-heading mb-4">Menu</h2>
+            <p class="max-w-xl mx-auto text-gray-400 mb-12">
+                Hand-crafted sandwiches and decadent desserts, featuring the freshest ingredients and our unique blend of flavors.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-10 text-left">
+                <!-- Menu Item 1: Signature Sandwich (Image Source s6.png) -->
+                <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                    <!-- Image is now clickable and has data attributes for the full-size image source -->
+                    <img 
+                        src="s3.png" 
+                        alt="The MOMS Signature Dish" 
+                        class="w-20 h-20 object-cover rounded-full cursor-pointer transition duration-200 hover:scale-110 menu-item-img"
+                        data-full-src="s6.png" 
+                        onclick="openModal(this)">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-1">
+                            <h4 class="text-xl font-bold text-white uppercase">The MOMS Signature Sandwich</h4>
+                            <span class="text-xl font-bold text-accent-custom">$15.99</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Our most popular item! Thinly sliced smoked turkey, creamy avocado, crisp bacon, and roasted red pepper aioli on toasted sourdough.</p>
+                    </div>
+                </div>
+                <!-- Menu Item 2: Sandwich 1 (s1) -->
+                <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                    <img 
+                        src="s1.png" 
+                        alt="Grilled Cheese Deluxe" 
+                        class="w-20 h-20 object-cover rounded-full cursor-pointer transition duration-200 hover:scale-110 menu-item-img"
+                        data-full-src="s1.png"
+                        onclick="openModal(this)">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-1">
+                            <h4 class="text-xl font-bold text-white uppercase">The Grilled Cheese Deluxe</h4>
+                            <span class="text-xl font-bold text-accent-custom">$11.50</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">A comforting blend of sharp cheddar, provolone, and gruyère, grilled to perfection on artisan brioche.</p>
+                    </div>
+                </div>
+                <!-- Menu Item 3: Sandwich 2 (s2) -->
+                <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                    <img 
+                        src="s2.png" 
+                        alt="Spicy Chicken Wrap" 
+                        class="w-20 h-20 object-cover rounded-full cursor-pointer transition duration-200 hover:scale-110 menu-item-img"
+                        data-full-src="s2.png"
+                        onclick="openModal(this)">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-1">
+                            <h4 class="text-xl font-bold text-white uppercase">Spicy Fiesta Chicken Wrap</h4>
+                            <span class="text-xl font-bold text-accent-custom">$13.00</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Grilled chicken breast tossed in a smoky chipotle sauce with fresh lettuce, tomato, and a cool ranch drizzle, wrapped in a spinach tortilla.</p>
+                    </div>
+                </div>
+                <!-- Menu Item 4: Sandwich 3 (s3) -->
+                <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                    <img 
+                        src="s3.png" 
+                        alt="Vegetarian Caprese" 
+                        class="w-20 h-20 object-cover rounded-full cursor-pointer transition duration-200 hover:scale-110 menu-item-img"
+                        data-full-src="s3.png"
+                        onclick="openModal(this)">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-1">
+                            <h4 class="text-xl font-bold text-white uppercase">Vegetarian Caprese Panini</h4>
+                            <span class="text-xl font-bold text-accent-custom">$12.50</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Fresh mozzarella, vine-ripened tomatoes, and basil pesto on toasted ciabatta bread.</p>
+                    </div>
+                </div>
+                <!-- Menu Item 5: Sandwich 4 (s6 - updated image source) -->
+                <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                    <img 
+                        src="s4.png" 
+                        alt="Classic Club" 
+                        class="w-20 h-20 object-cover rounded-full cursor-pointer transition duration-200 hover:scale-110 menu-item-img"
+                        data-full-src="s6.png"
+                        onclick="openModal(this)">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-1">
+                            <h4 class="text-xl font-bold text-white uppercase">The Traditional Club Sandwich</h4>
+                            <span class="text-xl font-bold text-accent-custom">$14.00</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">A triple-decker classic with ham, turkey, lettuce, tomato, and mayonnaise, served on toasted whole wheat.</p>
+                    </div>
+                </div>
+                <!-- Menu Item 6: Chocolate Cake (New Item - d1) -->
+                <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                    <img 
+                        src="d1.png" 
+                        alt="Decadent Chocolate Cake" 
+                        class="w-20 h-20 object-cover rounded-full cursor-pointer transition duration-200 hover:scale-110 menu-item-img"
+                        data-full-src="d1.png"
+                        onclick="openModal(this)">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-1">
+                            <h4 class="text-xl font-bold text-white uppercase">Decadent Chocolate Cake</h4>
+                            <span class="text-xl font-bold text-accent-custom">$8.50</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Rich, moist chocolate cake with dark chocolate ganache, perfect for any celebration.</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <button class="mt-12 bg-accent-custom font-bold py-3 px-8 rounded-full uppercase text-sm tracking-wider transition duration-300 hover:opacity-80">
+                See Full Menu
+            </button>
+        </div>
+    </section>
+
+    <!-- 
+    =======================================================
+    4. CONTACT SECTION
+    =======================================================
+    -->
+    <section id="contact" class="py-20" style="background-color: var(--bg-medium);">
+        <div class="container mx-auto px-6 text-center">
+            <i class="fas fa-map-marker-alt accent-icon"></i>
+            <h2 class="section-heading mb-4">Contact & Location</h2>
+            <p class="max-w-xl mx-auto text-gray-400 mb-12">
+                Visit us or get in touch with our team for reservations and inquiries.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- Contact Card 1: Address (Updated to reflect Nile University location in Egypt) -->
+                <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-dark);">
+                    <i class="fas fa-location-dot text-2xl mb-3 text-accent-custom"></i>
+                    <h4 class="text-xl font-bold mb-2 text-white">Our Address</h4>
+                    <p class="text-gray-400">Nile University, Sheikh Zayed City, Giza, Egypt</p>
+                </div>
+                <!-- Contact Card 2: Phone -->
+                <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-dark);">
+                    <i class="fas fa-phone text-2xl mb-3 text-accent-custom"></i>
+                    <h4 class="text-xl font-bold mb-2 text-white">Call Us</h4>
+                    <p class="text-gray-400">+20 102 497 5336</p>
+                </div>
+                <!-- Contact Card 3: Email -->
+                <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-dark);">
+                    <i class="fas fa-envelope text-2xl mb-3 text-accent-custom"></i>
+                    <h4 class="text-xl font-bold mb-2 text-white">Email Us</h4>
+                    <p class="text-gray-400">reservations@momsrestaurant.com</p>
+                </div>
+            </div>
+
+            <!-- Map Embed (Updated with Nile University Location) -->
+            <div class="w-full rounded-lg overflow-hidden shadow-2xl" style="height: 350px;">
+                <iframe 
+                    src="https://maps.google.com/maps?q=Nile%20University&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Nile University Location Map">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    =======================================================
+    FOOTER SECTION
+    =======================================================
+    -->
+    <footer class="py-10" style="background-color: var(--bg-medium);">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400 text-sm">&copy; 2025-2026 MOMS Restaurant. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 
+    =======================================================
+    IMAGE POP-UP MODAL STRUCTURE
+    =======================================================
+    -->
+    <div id="image-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <!-- Image tag where the full-size picture will be loaded -->
+            <img id="modal-image" src="" alt="Full size menu item photo">
+        </div>
+    </div>
   </body>
 </html>
