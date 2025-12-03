@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register-MOMS</title>
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins";
+      background: url("daddy_patty.jpg") center/cover no-repeat;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+    }
+
+    .auth-box {
+      z-index: 2;
+      width: 380px;
+      padding: 35px;
+      border-radius: 15px;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      text-align: center;
+    }
+
+    input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; }
+    button {
+      width: 100%; padding: 12px; border-radius: 12px;
+      background: rgb(202,138,4); border: none; color: white;
+    }
+    button:hover { background: gold; }
+
+    a { color: gold; text-decoration: none; margin-top: 15px; display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="auth-box">
+    <h2 style="color:rgb(202,138,4)">Register</h2>
+    <input type="text" placeholder="Full Name">
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Password">
+    <button>Register</button>
+
+    <a href="login.html">Already have an account?      Log In</a>
+    <a href="home_page.html">Back to Home</a>
+  </div>
+</body>
+</html>  
