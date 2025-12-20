@@ -65,13 +65,86 @@
   <body>
     <div class="auth-box">
       <h2 style="color: rgb(202, 138, 4)">Register</h2>
-      <input type="text" placeholder="Full Name" />
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
-      <button>Register</button>
+      <input id="name" type="text" placeholder="Full Name" />
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="registerBtn" type="button">Register</button>
 
       <a href="login.html">Already have an account? Log In</a>
       <a href="home_page.html">Back to Home</a>
     </div>
+
+    <script>
+      const AUTH_TOKEN_KEY = "moms_auth_token_v1";
+      const AUTH_USER_KEY = "moms_user_v1";
+
+      // Simple client-side email validation (MVP): must include '@'
+      function isValidEmail(email) {
+        return typeof email === "string" && email.includes("@");
+      }
+
+      async function register() {
+        const nameEl = document.getElementById("name");
+        const emailEl = document.getElementById("email");
+        const passwordEl = document.getElementById("password");
+        const btn = document.getElementById("registerBtn");
+
+        const name = nameEl ? nameEl.value.trim() : "";
+        const email = emailEl ? emailEl.value.trim() : "";
+        const password = passwordEl ? passwordEl.value : "";
+
+        if (!name || !email || !password) {
+          alert("Please fill name, email, and password.");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          alert("Invalid email. Please include '@'.");
+          return;
+        }
+
+        if (password.length < 6) {
+          alert("Password must be at least 6 characters.");
+          return;
+        }
+
+        if (btn) btn.disabled = true;
+        try {
+          const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password }),
+          });
+
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            alert(
+              data && data.error ? String(data.error) : "Registration failed."
+            );
+            return;
+          }
+
+          localStorage.setItem(AUTH_TOKEN_KEY, String(data.token || ""));
+          localStorage.setItem(
+            AUTH_USER_KEY,
+            JSON.stringify(data.user || null)
+          );
+          window.location.href = "home_page.html";
+        } catch {
+          alert("Could not reach the server. Start the backend first.");
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("registerBtn");
+        if (btn) btn.addEventListener("click", register);
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") register();
+        });
+      });
+    </script>
   </body>
 </html>

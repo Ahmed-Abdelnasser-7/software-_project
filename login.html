@@ -1,60 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - MOMS</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - MOMS</title>
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Poppins";
-      background: url("daddy_patty.jpg") center/cover no-repeat;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins";
+        background: url("daddy_patty.jpg") center/cover no-repeat;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
 
-    body::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-    }
+      body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+      }
 
-    .auth-box {
-      z-index: 2;
-      width: 380px;
-      padding: 35px;
-      border-radius: 15px;
-      background: rgba(0,0,0,0.85);
-      color: white;
-      text-align: center;
-    }
+      .auth-box {
+        z-index: 2;
+        width: 380px;
+        padding: 35px;
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        text-align: center;
+      }
 
-    input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; }
-    button {
-      width: 100%; padding: 12px; border-radius: 12px;
-      background: rgb(202,138,4); border: none; color: white;
-    }
-    button:hover { background: gold; }
+      input {
+        width: 90%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: none;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        background: rgb(202, 138, 4);
+        border: none;
+        color: white;
+      }
+      button:hover {
+        background: gold;
+      }
 
-    a { color: gold; text-decoration: none; margin-top: 15px; display: block; }
-  </style>
-</head>
+      a {
+        color: gold;
+        text-decoration: none;
+        margin-top: 15px;
+        display: block;
+      }
+    </style>
+  </head>
 
-<body>
-  <div class="auth-box">
-    <h2 style="color:rgb(202,138,4)">Log In</h2>
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
-    <button>Log In</button>
+  <body>
+    <div class="auth-box">
+      <h2 style="color: rgb(202, 138, 4)">Log In</h2>
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="loginBtn" type="button">Log In</button>
 
-    <a href="register.html">Don't have an account? Register</a>
-    <a href="home_page.html">Back to Home</a> 
-  </div>
-</body>
+      <a href="register.html">Don't have an account? Register</a>
+      <a href="home_page.html">Back to Home</a>
+    </div>
+
+    <script>
+      const AUTH_TOKEN_KEY = "moms_auth_token_v1";
+      const AUTH_USER_KEY = "moms_user_v1";
+
+      // Simple client-side email validation (MVP): must include '@'
+      function isValidEmail(email) {
+        return typeof email === "string" && email.includes("@");
+      }
+
+      async function login() {
+        const emailEl = document.getElementById("email");
+        const passwordEl = document.getElementById("password");
+        const btn = document.getElementById("loginBtn");
+
+        const email = emailEl ? emailEl.value.trim() : "";
+        const password = passwordEl ? passwordEl.value : "";
+
+        if (!email || !password) {
+          alert("Please enter email and password.");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          alert("Invalid email. Please include '@'.");
+          return;
+        }
+
+        if (btn) btn.disabled = true;
+        try {
+          const res = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            alert(data && data.error ? String(data.error) : "Login failed.");
+            return;
+          }
+
+          localStorage.setItem(AUTH_TOKEN_KEY, String(data.token || ""));
+          localStorage.setItem(
+            AUTH_USER_KEY,
+            JSON.stringify(data.user || null)
+          );
+          window.location.href = "home_page.html";
+        } catch {
+          alert("Could not reach the server. Start the backend first.");
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("loginBtn");
+        if (btn) btn.addEventListener("click", login);
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") login();
+        });
+      });
+    </script>
+  </body>
 </html>
