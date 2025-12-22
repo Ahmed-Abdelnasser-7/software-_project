@@ -252,7 +252,7 @@
     <div class="top-bar">
       <a href="home_page.html" class="flex items-center gap-3">
         <img
-          src="moms-logo.png"
+          src="images/moms-logo.png"
           style="height: 56px; width: auto"
           alt="MOMS logo"
         />
@@ -1566,12 +1566,16 @@
       // Add dish images (uses existing project images; rotates by category)
       (function injectDishImages() {
         const categoryPools = {
-          Sandwiches: ["s4.png", "s7.png", "s6.jpg"],
-          Meals: ["s8.png", "s9.png", "s10.png"],
-          "Family Buckets": ["s11.png", "s12.png", "s13.png"],
-          Desserts: ["d1.png", "s14.png", "s15.png"],
-          Salads: ["s16.png", "s17.png", "s18.png"],
-          Drinks: ["s19.png", "s20.png", "s21.png"],
+          Sandwiches: ["images/s4.png", "images/s7.png", "images/s6.jpg"],
+          Meals: ["images/s8.png", "images/s9.png", "images/s10.png"],
+          "Family Buckets": [
+            "images/s11.png",
+            "images/s12.png",
+            "images/s13.png",
+          ],
+          Desserts: ["images/d1.png", "images/s14.png", "images/s15.png"],
+          Salads: ["images/s16.png", "images/s17.png", "images/s18.png"],
+          Drinks: ["images/s19.png", "images/s20.png", "images/s21.png"],
         };
 
         const counters = Object.create(null);
@@ -1586,7 +1590,10 @@
           const category = btn.getAttribute("data-category") || "";
           const name = btn.getAttribute("data-name") || "Dish";
 
-          const pool = categoryPools[category] || ["s6.jpg", "moms-logo.png"];
+          const pool = categoryPools[category] || [
+            "images/s6.jpg",
+            "images/moms-logo.png",
+          ];
           const i = (counters[category] || 0) % pool.length;
           counters[category] = (counters[category] || 0) + 1;
 
@@ -1598,7 +1605,7 @@
           img.className =
             "w-full h-56 object-cover object-center rounded-xl mb-4 border border-white/10";
           img.addEventListener("error", () => {
-            img.src = "moms-logo.png";
+            img.src = "images/moms-logo.png";
           });
 
           card.insertBefore(img, card.firstChild);
