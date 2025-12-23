@@ -1,3 +1,5 @@
+name: moms
+
 services:
   db:
     image: postgres:16
@@ -15,6 +17,7 @@ services:
       retries: 20
 
   app:
+    image: moms-app:latest
     build:
       context: .
     restart: unless-stopped
