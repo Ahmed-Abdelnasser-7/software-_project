@@ -30,9 +30,12 @@ body {
     transform: none !important;
     height: auto !important;
     padding: 0.75rem !important;
-    gap: 0.5rem !important;
+    gap: 0.35rem !important;
+    row-gap: 0.35rem !important;
+    column-gap: 0.5rem !important;
     flex-wrap: wrap !important;
     margin-top: 0.5rem !important;
+    justify-content: center !important;
   }
 
   .top-bar img {
@@ -61,7 +64,7 @@ body {
     right: auto !important;
     width: auto !important;
     max-width: none;
-    margin: 0.25rem 0.25rem 0;
+    margin: 0.2rem 0.15rem 0;
     justify-content: center !important;
     padding: 0.5rem 0.9rem !important;
     font-size: 1rem !important;
@@ -75,7 +78,7 @@ body {
   .top-bar button[aria-label="Cart"] {
     position: static !important;
     right: auto !important;
-    margin: 0.25rem 0.25rem 0;
+    margin: 0.2rem 0.15rem 0;
     width: 44px !important;
     height: 40px !important;
   }
@@ -100,8 +103,18 @@ body {
     padding: 22px;
   }
 
-  input {
+  /* Only auth page inputs should be full-width (avoid breaking radios in modals) */
+  .auth-box input {
     width: 100% !important;
+  }
+
+  /* Add-to-cart options modal spice radios: keep them compact and readable */
+  #addOptionsSpiceBlock input[type="radio"] {
+    width: auto !important;
+  }
+
+  #addOptionsSpiceBlock .mt-2 {
+    justify-content: center;
   }
 
   /* Home page hero: avoid fixed desktop positioning on iPhone */
