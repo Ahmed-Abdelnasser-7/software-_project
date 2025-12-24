@@ -1,0 +1,27 @@
+{
+  "name": "moms-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --watch src/index.js",
+    "start": "node src/index.js",
+    "prisma:generate": "prisma generate --schema prisma/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema prisma/prisma/schema.prisma",
+    "prisma:validate": "prisma validate --schema prisma/prisma/schema.prisma",
+    "prisma:format:check": "prisma format --check --schema prisma/prisma/schema.prisma",
+    "ci": "npm run prisma:generate && npm run prisma:validate && npm run prisma:format:check"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.11"
+  },
+  "devDependencies": {
+    "prisma": "^6.1.0"
+  }
+}

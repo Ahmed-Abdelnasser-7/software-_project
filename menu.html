@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MOMS | Full Menu</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary-color: rgb(202, 138, 4);
+        --secondary-color: #86917a;
+        --bg-dark: #000000;
+        --bg-medium: #141414;
+        --text-light: #ffffff;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        scroll-behavior: smooth;
+      }
+
+      .top-bar {
+        margin-top: 10px;
+        backdrop-filter: blur(12px);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        height: 4rem;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        position: fixed;
+        width: 98%;
+        z-index: 10;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .links {
+        position: absolute;
+        left: 33%;
+        display: flex;
+        gap: 40px;
+        font-size: 25px;
+        font-weight: 450;
+        color: var(--text-light);
+        font-family: "Poppins";
+      }
+
+      .links a {
+        position: relative;
+        transition: color 0.3s ease;
+        text-decoration: none;
+        color: var(--text-light);
+      }
+
+      .links a::after {
+        content: "";
+        position: absolute;
+        bottom: -7px;
+        left: 0;
+        height: 2px;
+        width: 113%;
+        background: var(--primary-color);
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+
+      .links a:hover::after {
+        transform: scaleX(1);
+      }
+
+      .links a.active {
+        color: var(--primary-color);
+      }
+
+      .links a.active::after {
+        transform: scaleX(1);
+      }
+
+      .text-accent-custom {
+        color: var(--primary-color);
+      }
+
+      .bg-accent-custom {
+        background-color: var(--primary-color);
+        color: #000;
+      }
+
+      .category-pill {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .category-pill:hover {
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+
+      .menu-card {
+        background-color: var(--bg-medium);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      /* Keep the primary action consistently at the bottom of each card */
+      .menu-card .add-btn {
+        margin-top: auto;
+      }
+
+      .add-btn {
+        background-color: var(--primary-color);
+        color: #000;
+      }
+
+      .add-btn:hover {
+        opacity: 0.85;
+      }
+
+      /* =======================================================
+      PROFILE ICON (shows only when logged in)
+      - Hover tooltip shows which account is active.
+      =======================================================
+      */
+      .profile-btn {
+        width: 50px;
+        height: 43px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .profile-btn:hover {
+        background-color: rgba(255, 255, 255, 0.16);
+        cursor: pointer;
+      }
+
+      .page-wrap {
+        padding-top: 5.75rem; /* space for fixed top-bar */
+      }
+
+      /* =======================================================
+      ADD-TO-CART OPTIONS MODAL
+      =======================================================
+      */
+      .options-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        box-sizing: border-box;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+
+      .options-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .options-card {
+        width: min(460px, 100%);
+        background-color: var(--bg-medium);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      }
+
+      .options-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .options-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text-light);
+        font-size: 1.5rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .options-close:hover {
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+
+      .options-label {
+        display: block;
+        margin-top: 0.9rem;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .options-input {
+        margin-top: 0.5rem;
+        width: 100%;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--text-light);
+        border-radius: 9999px;
+        padding: 0.7rem 1rem;
+      }
+
+      .options-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+      }
+
+      .btn-secondary {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: transparent;
+        color: var(--text-light);
+      }
+
+      .btn-secondary:hover {
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+    </style>
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <a href="home_page.html" class="flex items-center gap-3">
+        <img
+          src="images/moms-logo.png"
+          style="height: 56px; width: auto"
+          alt="MOMS logo"
+        />
+      </a>
+
+      <div class="links">
+        <a href="home_page.html">Home</a>
+        <a href="#menu" class="active">Menu</a>
+      </div>
+
+      <a
+        id="registerLink"
+        href="register.html"
+        class="text-white text-xl bg-accent-custom px-4 py-2 rounded-2xl absolute right-20"
+        style="text-decoration: none"
+        >Registration</a
+      >
+
+      <button
+        id="logoutBtn"
+        type="button"
+        class="text-white text-xl bg-accent-custom px-4 py-2 rounded-2xl absolute right-[4.5rem]"
+        style="text-decoration: none; display: none"
+      >
+        Log out
+      </button>
+
+      <!-- Profile icon (shows only when logged in; hover to see current account) -->
+      <button
+        id="profileBtn"
+        type="button"
+        class="profile-btn absolute right-[11rem]"
+        style="display: none"
+        aria-label="Profile (hover to see account)"
+        title=""
+      >
+        <i class="fas fa-user text-accent-custom"></i>
+      </button>
+
+      <button
+        type="button"
+        class="absolute right-5 w-12 h-11 rounded-2xl flex items-center justify-center"
+        style="background-color: rgba(255, 255, 255, 0.1)"
+        aria-label="Cart"
+        onclick="document.getElementById('cart').scrollIntoView({ behavior: 'smooth' })"
+      >
+        <i class="fas fa-shopping-bag text-accent-custom"></i>
+      </button>
+    </div>
+
+    <main class="page-wrap">
+      <!-- HEADER -->
+      <section class="py-10" id="menu">
+        <div class="container mx-auto px-6 text-center">
+          <h1
+            class="text-4xl md:text-5xl font-extrabold uppercase tracking-wider"
+          >
+            Full Menu
+          </h1>
+          <p class="text-gray-400 mt-3 max-w-2xl mx-auto">
+            Choose a category, then tap “Add to cart” for any dish.
+          </p>
+
+          <!-- Category quick links -->
+          <div
+            class="mt-8 flex flex-wrap justify-center gap-3"
+            aria-label="Menu categories"
+          >
+            <a
+              class="category-pill px-4 py-2 rounded-full text-sm uppercase tracking-wider"
+              href="#sandwiches"
+              >Sandwiches</a
+            >
+            <a
+              class="category-pill px-4 py-2 rounded-full text-sm uppercase tracking-wider"
+              href="#meals"
+              >Meals</a
+            >
+            <a
+              class="category-pill px-4 py-2 rounded-full text-sm uppercase tracking-wider"
+              href="#family-buckets"
+              >Family Buckets</a
+            >
+            <a
+              class="category-pill px-4 py-2 rounded-full text-sm uppercase tracking-wider"
+              href="#desserts"
+              >Desserts</a
+            >
+            <a
+              class="category-pill px-4 py-2 rounded-full text-sm uppercase tracking-wider"
+              href="#salads"
+              >Salads</a
+            >
+            <a
+              class="category-pill px-4 py-2 rounded-full text-sm uppercase tracking-wider"
+              href="#drinks"
+              >Drinks</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- MENU SECTIONS -->
+      <section class="py-10" id="sandwiches">
+        <div class="container mx-auto px-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold uppercase">
+            Sandwiches
+          </h2>
+          <p class="text-gray-400 mt-2">Freshly made, toasted, and packed.</p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+          >
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Classic Club</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$14.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: A toasted triple-layer classic with turkey, ham,
+                crisp lettuce, tomato, and creamy mayo.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Classic Club"
+                data-price="14.00"
+                data-category="Sandwiches"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">BBQ Chicken Panini</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$13.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Smoky BBQ chicken with melted cheddar and
+                caramelized onions pressed on warm ciabatta.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="BBQ Chicken Panini"
+                data-price="13.00"
+                data-category="Sandwiches"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Caprese Panini</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$12.50</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Fresh mozzarella and tomatoes with basil pesto,
+                grilled on ciabatta for a bright, melty bite.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Caprese Panini"
+                data-price="12.50"
+                data-category="Sandwiches"
+              >
+                Add to cart
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10" id="meals">
+        <div class="container mx-auto px-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold uppercase">Meals</h2>
+          <p class="text-gray-400 mt-2">Comfort food classics, done right.</p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+          >
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">
+                  Grilled Chicken Plate
+                </h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$16.99</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Herb-grilled chicken served with fluffy rice,
+                seasonal vegetables, and a house sauce.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Grilled Chicken Plate"
+                data-price="16.99"
+                data-category="Meals"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Beef Burger Meal</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$15.50</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Juicy beef burger with cheese, fresh toppings, and
+                a side of fries.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Beef Burger Meal"
+                data-price="15.50"
+                data-category="Meals"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">
+                  Crispy Chicken Tenders
+                </h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$12.99</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Golden crispy tenders with fries, creamy coleslaw,
+                and your favorite dipping sauce.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Crispy Chicken Tenders"
+                data-price="12.99"
+                data-category="Meals"
+              >
+                Add to cart
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10" id="family-buckets">
+        <div class="container mx-auto px-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold uppercase">
+            Family Buckets
+          </h2>
+          <p class="text-gray-400 mt-2">Big portions for sharing.</p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+          >
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">
+                  Chicken Bucket (8 pcs)
+                </h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$29.99</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: An 8-piece crispy chicken bucket with fries and a
+                mix of sauces—made for sharing.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Chicken Bucket (8 pcs)"
+                data-price="29.99"
+                data-category="Family Buckets"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Family Meal Box</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$34.99</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: A family-sized combo with assorted sandwiches,
+                fries, a fresh salad bowl, and sauces.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Family Meal Box"
+                data-price="34.99"
+                data-category="Family Buckets"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Dessert Family Pack</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$18.99</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: A sweet sharing box with assorted cake slices, mini
+                brownies, and whipped cream.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Dessert Family Pack"
+                data-price="18.99"
+                data-category="Family Buckets"
+                data-spice="none"
+              >
+                Add to cart
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10" id="desserts">
+        <div class="container mx-auto px-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold uppercase">
+            Desserts
+          </h2>
+          <p class="text-gray-400 mt-2">Sweet endings.</p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+          >
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Chocolate Cake</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$8.50</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Rich chocolate cake layered with silky ganache and
+                finished with cocoa.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Chocolate Cake"
+                data-price="8.50"
+                data-category="Desserts"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Vanilla Cheesecake</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$9.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Creamy vanilla cheesecake on a biscuit crust with a
+                berry sauce swirl.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Vanilla Cheesecake"
+                data-price="9.00"
+                data-category="Desserts"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Warm Brownie</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$7.25</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Warm chocolate brownie topped with vanilla ice
+                cream and a chocolate drizzle.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Warm Brownie"
+                data-price="7.25"
+                data-category="Desserts"
+              >
+                Add to cart
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10" id="salads">
+        <div class="container mx-auto px-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold uppercase">Salads</h2>
+          <p class="text-gray-400 mt-2">Fresh, crisp, and flavorful.</p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+          >
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Caesar Salad</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$9.50</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Crisp romaine with parmesan, crunchy croutons, and
+                classic Caesar dressing.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Caesar Salad"
+                data-price="9.50"
+                data-category="Salads"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Greek Salad</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$10.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Fresh cucumbers and tomatoes with olives, feta, and
+                a light olive oil dressing.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Greek Salad"
+                data-price="10.00"
+                data-category="Salads"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">
+                  Chicken Garden Salad
+                </h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$12.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Mixed greens topped with grilled chicken, garden
+                veggies, and a zesty vinaigrette.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Chicken Garden Salad"
+                data-price="12.00"
+                data-category="Salads"
+              >
+                Add to cart
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10" id="drinks">
+        <div class="container mx-auto px-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold uppercase">Drinks</h2>
+          <p class="text-gray-400 mt-2">Chilled and refreshing.</p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+          >
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Fresh Lemonade</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$4.50</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Fresh-squeezed lemonade, lightly sweetened and
+                served over ice.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Fresh Lemonade"
+                data-price="4.50"
+                data-category="Drinks"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Iced Tea</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$4.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Chilled black tea with lemon—refreshing and light.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Iced Tea"
+                data-price="4.00"
+                data-category="Drinks"
+              >
+                Add to cart
+              </button>
+            </article>
+
+            <article class="menu-card rounded-2xl p-6">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold uppercase">Soft Drink</h3>
+                <span class="text-xl font-extrabold text-accent-custom"
+                  >$3.00</span
+                >
+              </div>
+              <p class="text-gray-400 mt-3">
+                Description: Classic soft drink served cold over ice.
+              </p>
+              <button
+                class="add-btn mt-5 w-full py-3 rounded-full font-bold uppercase text-sm"
+                data-name="Soft Drink"
+                data-price="3.00"
+                data-category="Drinks"
+              >
+                Add to cart
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- CART SUMMARY -->
+      <section class="py-12" id="cart">
+        <div class="container mx-auto px-6">
+          <div class="menu-card rounded-2xl p-6 md:p-8">
+            <div class="flex items-start justify-between gap-6 flex-wrap">
+              <div>
+                <h2 class="text-2xl font-extrabold uppercase">Your Cart</h2>
+                <p class="text-gray-400 mt-2">
+                  Items you added will stay saved in this browser.
+                </p>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-400 uppercase tracking-wider">
+                  Total
+                </div>
+                <div
+                  class="text-3xl font-extrabold text-accent-custom"
+                  id="cartTotal"
+                >
+                  $0.00
+                </div>
+                <div class="text-gray-400 mt-1" id="cartCount">0 items</div>
+              </div>
+            </div>
+
+            <div class="mt-6 overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr class="text-gray-400">
+                    <th class="py-2">Item</th>
+                    <th class="py-2">Category</th>
+                    <th class="py-2">Qty</th>
+                    <th class="py-2">Price</th>
+                    <th class="py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="cartBody"></tbody>
+              </table>
+              <p class="text-gray-500 mt-4" id="cartEmpty">
+                Your cart is empty — add something from the menu.
+              </p>
+            </div>
+
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                class="bg-accent-custom font-bold py-3 px-8 rounded-full uppercase text-sm tracking-wider transition duration-300 hover:opacity-80"
+                onclick="clearCart()"
+              >
+                Clear cart
+              </button>
+              <a
+                href="home_page.html"
+                class="border border-white/20 text-white font-bold py-3 px-8 rounded-full uppercase text-sm tracking-wider transition duration-300 hover:border-white/40 text-center"
+                style="text-decoration: none"
+              >
+                Back to home
+              </a>
+            </div>
+
+            <!-- CHECKOUT + ORDERS -->
+            <div class="mt-8 border-t border-white/10 pt-6">
+              <h3 class="text-xl font-extrabold uppercase">Checkout</h3>
+              <p class="text-gray-400 mt-2">
+                Enter your location, then confirm your order.
+              </p>
+
+              <div class="mt-4">
+                <label
+                  for="checkoutLocation"
+                  class="block text-sm uppercase tracking-wider text-gray-400"
+                  >Delivery location</label
+                >
+                <input
+                  id="checkoutLocation"
+                  type="text"
+                  placeholder="Building, street, area"
+                  class="mt-2 w-full bg-transparent border border-white/20 text-white rounded-full px-4 py-3"
+                />
+              </div>
+
+              <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="menu-card rounded-2xl p-4">
+                  <div class="text-sm text-gray-400 uppercase tracking-wider">
+                    Delivery fee
+                  </div>
+                  <div
+                    class="text-2xl font-extrabold text-white mt-1"
+                    id="deliveryFee"
+                  >
+                    $0.00
+                  </div>
+                </div>
+                <div class="menu-card rounded-2xl p-4">
+                  <div class="text-sm text-gray-400 uppercase tracking-wider">
+                    Grand total
+                  </div>
+                  <div
+                    class="text-2xl font-extrabold text-accent-custom mt-1"
+                    id="grandTotal"
+                  >
+                    $0.00
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  class="bg-accent-custom font-bold py-3 px-8 rounded-full uppercase text-sm tracking-wider transition duration-300 hover:opacity-80"
+                  id="confirmOrderBtn"
+                >
+                  Confirm order
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-8 border-t border-white/10 pt-6" id="orders">
+              <h3 class="text-xl font-extrabold uppercase">Orders</h3>
+              <p class="text-gray-400 mt-2">
+                Your confirmed orders (with arrival countdown).
+              </p>
+
+              <div class="mt-4 space-y-3" id="ordersList"></div>
+              <p class="text-gray-500 mt-4" id="ordersEmpty">
+                No orders yet — confirm checkout to create one.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="py-10 text-center text-gray-500">
+        <div class="container mx-auto px-6">© MOMS Restaurant</div>
+      </footer>
+    </main>
+
+    <!-- Add-to-cart options modal -->
+    <div
+      id="addOptionsModal"
+      class="options-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="options-card">
+        <div class="options-header">
+          <div>
+            <div class="text-sm text-gray-400 uppercase tracking-wider">
+              Options
+            </div>
+            <div id="addOptionsTitle" class="text-white font-extrabold text-xl">
+              Add to cart
+            </div>
+          </div>
+          <button
+            type="button"
+            class="options-close"
+            aria-label="Close"
+            onclick="closeAddOptions()"
+          >
+            &times;
+          </button>
+        </div>
+
+        <label class="options-label" for="addOptionsQty">Quantity</label>
+        <input
+          id="addOptionsQty"
+          class="options-input"
+          type="number"
+          min="1"
+          step="1"
+          value="1"
+        />
+
+        <div id="addOptionsSpiceBlock">
+          <span class="options-label">Spice</span>
+          <div
+            class="mt-2 flex flex-wrap gap-4"
+            style="color: rgba(255, 255, 255, 0.9)"
+          >
+            <label class="flex items-center gap-2">
+              <input
+                type="radio"
+                name="addOptionsSpice"
+                value="Regular"
+                checked
+              />
+              Regular
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="addOptionsSpice" value="Spicy" />
+              Spicy
+            </label>
+          </div>
+        </div>
+
+        <div class="options-actions">
+          <button
+            type="button"
+            class="btn-secondary w-1/2 py-3 rounded-full font-bold uppercase text-sm tracking-wider"
+            onclick="closeAddOptions()"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="addOptionsConfirm"
+            class="add-btn w-1/2 py-3 rounded-full font-bold uppercase text-sm tracking-wider"
+          >
+            Confirm add to cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // =======================================================
+      // CART + CHECKOUT + ORDERS (client cart + server orders)
+      // =======================================================
+      const CART_KEY = "moms_cart_v1";
+      const LOCATION_KEY = "moms_checkout_location_v1";
+
+      const AUTH_TOKEN_KEY = "moms_auth_token_v1";
+      const AUTH_USER_KEY = "moms_user_v1";
+
+      const DELIVERY_FEE = 4.99;
+      const ORDERS_POLL_MS = 15000;
+
+      let ordersTicker = null;
+      let ordersPoller = null;
+      let ordersCache = [];
+
+      let pendingAddOptions = null;
+
+      function getAuthToken() {
+        return localStorage.getItem(AUTH_TOKEN_KEY) || "";
+      }
+
+      function isLoggedIn() {
+        return Boolean(getAuthToken());
+      }
+
+      function getAuthHeaders() {
+        const token = getAuthToken();
+        return token ? { Authorization: `Bearer ${token}` } : {};
+      }
+
+      // =======================================================
+      // PROFILE TOOLTIP (who is currently logged in?)
+      // - Reads the stored user from localStorage.
+      // - Used to set the hover tooltip on the profile icon.
+      // =======================================================
+      function toTitleCaseName(value) {
+        const raw = String(value || "").trim();
+        if (!raw) return "";
+
+        // Collapse extra whitespace, then title-case each word.
+        return raw
+          .replace(/\s+/g, " ")
+          .split(" ")
+          .map((word) => {
+            const w = word.trim();
+            if (!w) return "";
+
+            // Support common name separators like hyphens and apostrophes.
+            return w
+              .split(/([-'])/)
+              .map((part) => {
+                if (part === "-" || part === "'") return part;
+                const lower = part.toLowerCase();
+                return lower.charAt(0).toUpperCase() + lower.slice(1);
+              })
+              .join("");
+          })
+          .join(" ");
+      }
+
+      function getCurrentUserLabel() {
+        try {
+          const raw = localStorage.getItem(AUTH_USER_KEY);
+          if (!raw) return "";
+          const user = JSON.parse(raw);
+          if (!user || typeof user !== "object") return "";
+          // Full name is required at registration, so we show it here.
+          const fullName = user.fullName || user.name;
+          return fullName ? toTitleCaseName(fullName) : "";
+        } catch {
+          return "";
+        }
+      }
+
+      function updateAuthUI() {
+        const loggedIn = isLoggedIn();
+        const registerLink = document.getElementById("registerLink");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const profileBtn = document.getElementById("profileBtn");
+        if (registerLink) registerLink.style.display = loggedIn ? "none" : "";
+        if (logoutBtn) {
+          logoutBtn.style.display = loggedIn ? "inline-flex" : "none";
+        }
+
+        // Profile icon: shown only when logged in.
+        // Hover tooltip shows which account is active.
+        if (profileBtn) {
+          profileBtn.style.display = loggedIn ? "flex" : "none";
+          if (loggedIn) {
+            const label = getCurrentUserLabel();
+            profileBtn.title = label ? `Signed in as: ${label}` : "Signed in";
+          } else {
+            profileBtn.title = "";
+          }
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_USER_KEY);
+        ordersCache = [];
+        updateAuthUI();
+        renderOrders();
+      }
+
+      function requireLogin(message) {
+        if (isLoggedIn()) return true;
+        alert(message || "Please log in first.");
+        window.location.href = "login.html";
+        return false;
+      }
+
+      function openAddOptions(item, spicyAvailable) {
+        const modal = document.getElementById("addOptionsModal");
+        const title = document.getElementById("addOptionsTitle");
+        const qtyInput = document.getElementById("addOptionsQty");
+        const spiceBlock = document.getElementById("addOptionsSpiceBlock");
+
+        if (!modal || !title || !qtyInput || !spiceBlock) return;
+
+        pendingAddOptions = { item, spicyAvailable: Boolean(spicyAvailable) };
+        title.textContent =
+          item && item.name ? String(item.name) : "Add to cart";
+        qtyInput.value = "1";
+
+        spiceBlock.style.display = pendingAddOptions.spicyAvailable
+          ? "block"
+          : "none";
+        const defaultRadio = document.querySelector(
+          'input[name="addOptionsSpice"][value="Regular"]'
+        );
+        if (defaultRadio) defaultRadio.checked = true;
+
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        qtyInput.focus();
+      }
+
+      function closeAddOptions() {
+        const modal = document.getElementById("addOptionsModal");
+        if (!modal) return;
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "auto";
+        pendingAddOptions = null;
+      }
+
+      window.closeAddOptions = closeAddOptions;
+
+      function readCart() {
+        try {
+          const raw = localStorage.getItem(CART_KEY);
+          if (!raw) return {};
+          const parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed !== "object") return {};
+          return parsed;
+        } catch {
+          return {};
+        }
+      }
+
+      function writeCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      }
+
+      async function fetchOrdersFromApi() {
+        const list = document.getElementById("ordersList");
+        const empty = document.getElementById("ordersEmpty");
+
+        if (!isLoggedIn()) {
+          ordersCache = [];
+          if (list) list.innerHTML = "";
+          if (empty) {
+            empty.style.display = "block";
+            empty.textContent = "Please log in to see your order history.";
+          }
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/orders", { headers: getAuthHeaders() });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            if (res.status === 401) {
+              logout();
+              return;
+            }
+            throw new Error(
+              data && data.error ? data.error : "Failed to load orders"
+            );
+          }
+          ordersCache = Array.isArray(data.orders) ? data.orders : [];
+          renderOrders();
+        } catch {
+          renderOrders();
+        }
+      }
+
+      async function createOrderOnApi(location, items) {
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify({ location, items }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const err = new Error(
+            data && data.error ? String(data.error) : "Order failed"
+          );
+          err.status = res.status;
+          throw err;
+        }
+        return data.order;
+      }
+
+      function addToCart(item, qty = 1) {
+        const cart = readCart();
+        const key = item.name;
+        const addQty = Math.max(1, Math.floor(Number(qty) || 1));
+        if (!cart[key]) {
+          cart[key] = { ...item, qty: addQty };
+        } else {
+          cart[key].qty += addQty;
+        }
+        writeCart(cart);
+        renderCart();
+      }
+
+      function removeQty(name, amount) {
+        const cart = readCart();
+        if (!cart[name]) return;
+        const qty = Number(cart[name].qty || 0);
+        const remove = Math.max(1, Number(amount || 1));
+        const next = qty - remove;
+        if (next <= 0) delete cart[name];
+        else cart[name].qty = next;
+        writeCart(cart);
+        renderCart();
+      }
+
+      function removeAllOfItem(name) {
+        const cart = readCart();
+        if (!cart[name]) return;
+        delete cart[name];
+        writeCart(cart);
+        renderCart();
+      }
+
+      function clearCart() {
+        writeCart({});
+        renderCart();
+      }
+
+      function formatMoney(value) {
+        return `$${Number(value).toFixed(2)}`;
+      }
+
+      function getCartSummary() {
+        const cart = readCart();
+        const items = Object.values(cart);
+        let subtotal = 0;
+        let count = 0;
+        for (const item of items) {
+          subtotal += Number(item.price) * Number(item.qty);
+          count += Number(item.qty);
+        }
+        return { items, subtotal, count };
+      }
+
+      function updateCheckoutSummary() {
+        const deliveryFeeEl = document.getElementById("deliveryFee");
+        const grandTotalEl = document.getElementById("grandTotal");
+        const confirmBtn = document.getElementById("confirmOrderBtn");
+
+        if (!deliveryFeeEl || !grandTotalEl) return;
+
+        const { subtotal, count } = getCartSummary();
+        const appliedFee = count > 0 ? DELIVERY_FEE : 0;
+        const grandTotal = subtotal + appliedFee;
+
+        deliveryFeeEl.textContent = formatMoney(appliedFee);
+        grandTotalEl.textContent = formatMoney(grandTotal);
+
+        if (confirmBtn) {
+          confirmBtn.disabled = count === 0;
+          confirmBtn.classList.toggle("opacity-50", count === 0);
+          confirmBtn.classList.toggle("cursor-not-allowed", count === 0);
+        }
+      }
+
+      function formatTimeLeft(ms) {
+        const safeMs = Math.max(0, Number(ms) || 0);
+        const totalSeconds = Math.ceil(safeMs / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
+      }
+
+      function renderOrders() {
+        const list = document.getElementById("ordersList");
+        const empty = document.getElementById("ordersEmpty");
+        if (!list || !empty) return;
+
+        const now = Date.now();
+        const orders = Array.isArray(ordersCache) ? ordersCache : [];
+
+        list.innerHTML = "";
+        empty.style.display = orders.length === 0 ? "block" : "none";
+        if (orders.length === 0) return;
+
+        for (const order of orders) {
+          const remainingMs = Number(order.etaAt) - now;
+          const delivered = Number(order.etaAt) <= now;
+          const etaText = delivered ? "Delivered" : formatTimeLeft(remainingMs);
+
+          const itemsText = Array.isArray(order.items)
+            ? order.items.map((i) => `${i.qty}× ${i.name}`).join(", ")
+            : "";
+
+          const card = document.createElement("div");
+          card.className = "menu-card rounded-2xl p-5";
+          card.innerHTML = `
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <div class="text-sm text-gray-400 uppercase tracking-wider">Order</div>
+                <div class="text-white font-bold mt-1">${new Date(
+                  Number(order.createdAt)
+                ).toLocaleString()}</div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-400 uppercase tracking-wider">ETA</div>
+                <div class="text-accent-custom font-extrabold text-xl">${etaText}</div>
+              </div>
+            </div>
+            <div class="text-gray-300 mt-3"><span class="text-gray-400">Location:</span> ${
+              order.location ? String(order.location) : "-"
+            }</div>
+            <div class="text-gray-300 mt-2"><span class="text-gray-400">Items:</span> ${
+              itemsText || "-"
+            }</div>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-gray-400">Total</div>
+              <div class="text-white font-extrabold">${formatMoney(
+                Number(order.total || 0)
+              )}</div>
+            </div>
+          `;
+          list.appendChild(card);
+        }
+      }
+
+      async function confirmOrder() {
+        const locationInput = document.getElementById("checkoutLocation");
+        const location = locationInput ? locationInput.value.trim() : "";
+
+        const { items, count } = getCartSummary();
+        if (count === 0) {
+          alert("Your cart is empty.");
+          return;
+        }
+
+        if (!location) {
+          alert("Please enter your delivery location.");
+          return;
+        }
+
+        if (!requireLogin("Please log in to confirm your order.")) return;
+
+        localStorage.setItem(LOCATION_KEY, location);
+
+        const payloadItems = items.map((i) => ({
+          name: i.name,
+          category: i.category,
+          price: Number(i.price),
+          qty: Number(i.qty),
+        }));
+
+        try {
+          const created = await createOrderOnApi(location, payloadItems);
+          if (created) {
+            ordersCache = [
+              created,
+              ...(Array.isArray(ordersCache) ? ordersCache : []),
+            ];
+          }
+          clearCart();
+          renderOrders();
+          alert("Order confirmed! Check the Orders section for the countdown.");
+        } catch (err) {
+          if (err && err.status === 401) {
+            alert("Session expired. Please log in again.");
+            logout();
+            window.location.href = "login.html";
+            return;
+          }
+          alert(err && err.message ? String(err.message) : "Order failed.");
+        }
+      }
+
+      function renderCart() {
+        const cart = readCart();
+        const body = document.getElementById("cartBody");
+        const empty = document.getElementById("cartEmpty");
+        const totalEl = document.getElementById("cartTotal");
+        const countEl = document.getElementById("cartCount");
+
+        const items = Object.values(cart);
+
+        body.innerHTML = "";
+
+        let total = 0;
+        let count = 0;
+
+        for (const item of items) {
+          total += item.qty * Number(item.price);
+          count += item.qty;
+
+          const tr = document.createElement("tr");
+          tr.className = "border-t border-white/10";
+          tr.innerHTML = `
+            <td class="py-3 font-semibold text-white">${item.name}</td>
+            <td class="py-3 text-gray-300">${item.category}</td>
+            <td class="py-3 text-gray-300">${item.qty}</td>
+            <td class="py-3 text-accent-custom font-bold">${formatMoney(
+              item.qty * Number(item.price)
+            )}</td>
+            <td class="py-3">
+              <div class="flex flex-wrap items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max="${item.qty}"
+                  value="1"
+                  class="w-20 bg-transparent border border-white/20 text-white rounded-full px-3 py-1 text-sm"
+                  data-remove-input
+                  aria-label="Quantity to remove"
+                />
+                <button
+                  type="button"
+                  class="border border-white/20 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider hover:border-white/40"
+                  data-remove-qty="${item.name}"
+                >
+                  Remove
+                </button>
+                <button
+                  type="button"
+                  class="border border-white/20 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider hover:border-white/40"
+                  data-remove-all="${item.name}"
+                >
+                  Remove all
+                </button>
+              </div>
+            </td>
+          `;
+          body.appendChild(tr);
+        }
+
+        totalEl.textContent = formatMoney(total);
+        countEl.textContent = `${count} item${count === 1 ? "" : "s"}`;
+
+        const isEmpty = items.length === 0;
+        empty.style.display = isEmpty ? "block" : "none";
+
+        updateCheckoutSummary();
+      }
+
+      // Hook up ONLY dish add-to-cart buttons (avoid binding the modal confirm button)
+      document
+        .querySelectorAll(
+          "button.add-btn[data-name][data-price][data-category]"
+        )
+        .forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (!requireLogin("Please log in to add items to your cart."))
+              return;
+
+            const name = btn.getAttribute("data-name");
+            const price = btn.getAttribute("data-price");
+            const category = btn.getAttribute("data-category");
+
+            // Safety: if this isn't a dish button, ignore.
+            if (!name || !price || !category) return;
+
+            // Spicy/Regular is available for most food, but can be disabled per item.
+            // Use: data-spice="none" on the dish button.
+            const spicyAvailableByCategory = ![
+              "Drinks",
+              "Salads",
+              "Desserts",
+            ].includes(String(category));
+
+            const spiceOverride = String(btn.getAttribute("data-spice") || "")
+              .trim()
+              .toLowerCase();
+
+            const spicyAvailable =
+              spicyAvailableByCategory && spiceOverride !== "none";
+            openAddOptions({ name, price, category }, spicyAvailable);
+          });
+        });
+
+      const addOptionsConfirm = document.getElementById("addOptionsConfirm");
+      if (addOptionsConfirm) {
+        addOptionsConfirm.addEventListener("click", () => {
+          if (!requireLogin("Please log in to add items to your cart.")) return;
+          if (!pendingAddOptions || !pendingAddOptions.item) return;
+
+          const qtyInput = document.getElementById("addOptionsQty");
+          const qty = qtyInput ? Number(qtyInput.value) : 1;
+
+          let name = pendingAddOptions.item.name;
+          if (pendingAddOptions.spicyAvailable) {
+            const selected = document.querySelector(
+              'input[name="addOptionsSpice"]:checked'
+            );
+            const spice = selected ? selected.value : "Regular";
+            if (name) name = `${name} (${spice})`;
+          }
+
+          addToCart(
+            {
+              name,
+              price: pendingAddOptions.item.price,
+              category: pendingAddOptions.item.category,
+            },
+            qty
+          );
+          closeAddOptions();
+        });
+      }
+
+      // Add dish images (uses existing project images; rotates by category)
+      (function injectDishImages() {
+        const categoryPools = {
+          Sandwiches: ["images/s4.png", "images/s7.png", "images/s6.jpg"],
+          Meals: ["images/s8.png", "images/s9.png", "images/s10.png"],
+          "Family Buckets": [
+            "images/s11.png",
+            "images/s12.png",
+            "images/s13.png",
+          ],
+          Desserts: ["images/d1.png", "images/s14.png", "images/s15.png"],
+          Salads: ["images/s16.png", "images/s17.png", "images/s18.png"],
+          Drinks: ["images/s19.png", "images/s20.png", "images/s21.png"],
+        };
+
+        const counters = Object.create(null);
+
+        document.querySelectorAll("article.menu-card").forEach((card) => {
+          // Avoid double-inject if something reruns.
+          if (card.querySelector("img[data-dish-image]")) return;
+
+          const btn = card.querySelector("button.add-btn");
+          if (!btn) return;
+
+          const category = btn.getAttribute("data-category") || "";
+          const name = btn.getAttribute("data-name") || "Dish";
+
+          const pool = categoryPools[category] || [
+            "images/s6.jpg",
+            "images/moms-logo.png",
+          ];
+          const i = (counters[category] || 0) % pool.length;
+          counters[category] = (counters[category] || 0) + 1;
+
+          const img = document.createElement("img");
+          img.src = pool[i];
+          img.alt = name;
+          img.loading = "lazy";
+          img.setAttribute("data-dish-image", "true");
+          img.className =
+            "w-full h-56 object-cover object-center rounded-xl mb-4 border border-white/10";
+          img.addEventListener("error", () => {
+            img.src = "images/moms-logo.png";
+          });
+
+          card.insertBefore(img, card.firstChild);
+        });
+      })();
+
+      // Cart table controls (event delegation)
+      const cartBody = document.getElementById("cartBody");
+      if (cartBody) {
+        cartBody.addEventListener("click", (e) => {
+          const target = e.target;
+          if (!(target instanceof HTMLElement)) return;
+
+          const removeQtyName = target.getAttribute("data-remove-qty");
+          if (removeQtyName) {
+            const row = target.closest("tr");
+            const input = row
+              ? row.querySelector("input[data-remove-input]")
+              : null;
+            const maxAttr = input ? input.getAttribute("max") : null;
+            const max = maxAttr ? Number(maxAttr) : Infinity;
+            const amountRaw = input ? Number(input.value) : 1;
+            const amount = Math.max(
+              1,
+              Math.min(max, Number.isFinite(amountRaw) ? amountRaw : 1)
+            );
+            removeQty(removeQtyName, amount);
+            return;
+          }
+
+          const removeAllName = target.getAttribute("data-remove-all");
+          if (removeAllName) {
+            removeAllOfItem(removeAllName);
+          }
+        });
+      }
+
+      // Initialize cart on first load
+      renderCart();
+
+      // Setup checkout + orders UI
+      (function setupCheckoutAndOrders() {
+        updateAuthUI();
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            if (confirm("Are you sure you want to log out?")) logout();
+          });
+        }
+
+        const locationInput = document.getElementById("checkoutLocation");
+        if (locationInput) {
+          locationInput.value = localStorage.getItem(LOCATION_KEY) || "";
+          locationInput.addEventListener("input", () => {
+            localStorage.setItem(LOCATION_KEY, locationInput.value);
+          });
+        }
+
+        const confirmBtn = document.getElementById("confirmOrderBtn");
+        if (confirmBtn) confirmBtn.addEventListener("click", confirmOrder);
+
+        fetchOrdersFromApi();
+        updateCheckoutSummary();
+
+        if (ordersTicker) window.clearInterval(ordersTicker);
+        ordersTicker = window.setInterval(renderOrders, 1000);
+
+        if (ordersPoller) window.clearInterval(ordersPoller);
+        ordersPoller = window.setInterval(fetchOrdersFromApi, ORDERS_POLL_MS);
+      })();
+
+      window.addEventListener("storage", (e) => {
+        if (e.key === AUTH_TOKEN_KEY || e.key === AUTH_USER_KEY) {
+          updateAuthUI();
+          fetchOrdersFromApi();
+        }
+      });
+
+      // =======================================================
+      // Expose minimal functions used by inline HTML handlers
+      // =======================================================
+      window.clearCart = clearCart;
+      window.removeQty = removeQty;
+      window.removeAllOfItem = removeAllOfItem;
+
+      window.confirmOrder = confirmOrder;
+    </script>
+  </body>
+</html>
